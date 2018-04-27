@@ -1,0 +1,7 @@
+e:\GitHub\LabExam\LabExam\bin\Debug\LabExam.exe.config
+e:\GitHub\LabExam\LabExam\bin\Debug\LabExam.exe
+e:\GitHub\LabExam\LabExam\bin\Debug\LabExam.pdb
+e:\GitHub\LabExam\LabExam\obj\Debug\LabExam.csprojResolveAssemblyReference.cache
+e:\GitHub\LabExam\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
+e:\GitHub\LabExam\LabExam\obj\Debug\LabExam.exe
+e:\GitHub\LabExam\LabExam\obj\Debug\LabExam.pdb

@@ -8,9 +8,11 @@ namespace LabExam
 {
     class Program
     {
+        public static PrinterManager printerManager = new PrinterManager();
         [STAThread]
         static void Main(string[] args)
         {
+            
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
@@ -41,19 +43,30 @@ namespace LabExam
 
         private static void Print(EpsonPrinter epsonPrinter)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            printerManager.Print(epsonPrinter);
+            printerManager.Logger.Log("Printed on Epson");
         }
 
         private static void Print(CanonPrinter canonPrinter)
         {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
+            printerManager.Print(canonPrinter);
+            printerManager.Logger.Log("Printed on Canon");
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            try
+            {
+                Console.WriteLine("Enter printer name");
+                string Name = Console.ReadLine();
+                Console.WriteLine("Enter printer model");
+                string Model = Console.ReadLine();
+                printerManager.Add(new Printer(Name, Model));
+            }
+            catch(ArgumentException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
     }
 }

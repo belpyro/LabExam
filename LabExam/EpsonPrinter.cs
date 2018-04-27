@@ -3,25 +3,35 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class EpsonPrinter
+    internal sealed class EpsonPrinter : Printer
     {
-        public EpsonPrinter()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="EpsonPrinter"/> class.
+        /// </summary>
+        public EpsonPrinter() : this("Epson", "231")
         {
-            Model = "231";
-            Name = "Epson";
         }
 
-        public void Print(FileStream fs)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CanonPrinter"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="model">The model.</param>
+        public EpsonPrinter(string name, string model) : base(name, model)
         {
-            for (int i = 0; i < fs.Length; i++)
+        }
+
+        /// <summary>
+        /// Prints the specified file stream.
+        /// </summary>
+        /// <param name="fileStream">The file stream.</param>
+        public override void Print(FileStream fileStream)
+        {
+            for (int i = 0; i < fileStream.Length; i++)
             {
                 // simulate printing
-                Console.WriteLine(fs.ReadByte());
+                Console.WriteLine(fileStream.ReadByte());
             }
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

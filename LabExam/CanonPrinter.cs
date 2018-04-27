@@ -3,25 +3,35 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class CanonPrinter
+    internal sealed class CanonPrinter : Printer
     {
-        public CanonPrinter()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CanonPrinter"/> class.
+        /// </summary>
+        public CanonPrinter() : this("Canon", "123x")
         {
-            Name = "Canon";
-            Model = "123x";
         }
 
-        public void Print(FileStream fs)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CanonPrinter"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="model">The model.</param>
+        public CanonPrinter(string name, string model) : base(name, model)
+        {            
+        }
+
+        /// <summary>
+        /// Prints the specified file stream.
+        /// </summary>
+        /// <param name="fileStream">The file stream.</param>
+        public override void Print(FileStream fileStream)
         {
-            for (int i = 0; i < fs.Length; i++)
+            for (int i = 0; i < fileStream.Length; i++)
             {
                 // simulate printing
-                Console.WriteLine(fs.ReadByte());
+                Console.WriteLine(fileStream.ReadByte());
             }
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }
