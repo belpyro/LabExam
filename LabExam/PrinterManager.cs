@@ -5,56 +5,47 @@ using System.Windows.Forms;
 
 namespace LabExam
 {
-    public delegate void PrinterDelegate(string arg);
-
-    internal static class PrinterManager
+    internal class PrinterManager
     {
-        static PrinterManager()
+        public  event EventHandler<PrintArgs> NewPrinting = delegate {}; //событие для печати
+
+        protected virtual void OnNewPrinting(PrintArgs args)
         {
-            Printers = new List<object>();
+            EventHandler<PrintArgs> temp = NewPrinting;
+            temp?.Invoke(this, args);
         }
 
-        public static List<object> Printers { get; set; }
+        static PrinterManager()
+        {
+            Printers = new List<Printer>();
+        }
 
-        public static void Add(Printer p1)
+        public static List<Printer> Printers { get; set; }
+
+
+
+        public static void Add(Printer p)
         {
             Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
+            p.Name = Console.ReadLine();
             Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
+            p.Model = Console.ReadLine();
 
-            if (!Printers.Contains(p1))
+            if (!Printers.Contains(p))
             {
-                Printers.Add(p1);
+                Printers.Add(p);
                 Console.WriteLine("Printer added");
             }
         }
 
-        public static void Print(EpsonPrinter p1)
+        public void Print(Printer printer, ILogger logger) //читабельное имя, более общий тип параметра
         {
-            Log("Print started");
+            logger.Log("Print started");
             var o = new OpenFileDialog();
             o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            var f = new PrintArgs(File.OpenRead(o.FileName));
+            printer.Print(this, f);
+            logger.Log("Print finished");
         }
-
-        public static void Print(CanonPrinter p1)
-        {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
-
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
-        }
-
-        public static event PrinterDelegate OnPrinted;
     }
 }
