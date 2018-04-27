@@ -41,9 +41,9 @@ namespace LabExam
         /// Writes logs to a file
         /// </summary>
         /// <param name="s">Log message</param>
-        public static void Log(string s)
+        public static void Log(string message)
         {
-            File.AppendText("log.txt").Write(s);
+            File.AppendText("log.txt").Write(message);
         }
     }
 }
