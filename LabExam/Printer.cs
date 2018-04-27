@@ -1,9 +1,15 @@
 ﻿namespace LabExam
 {
-    internal struct Printer
+    public class Printer : AbstractPrinter
     {
-        public string Name { get; set; }
+        public Printer(string name, string model)
+        {
+            Name = name;
+            Model = model;
+        }
 
-        public string Model { get; set; }
+        public override string Name { get; set; }
+
+        public override string Model { get; set; }
     }
 }

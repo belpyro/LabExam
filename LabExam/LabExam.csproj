@@ -42,8 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CanonPrinter.cs" />
-    <Compile Include="EpsonPrinter.cs" />
+    <Compile Include="AbstractPrinter.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="PrinterManager.cs" />
     <Compile Include="Program.cs" />
