@@ -3,25 +3,35 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class EpsonPrinter
+    // Impliments IPrinter for further extension or adding new printers
+    internal class EpsonPrinter : Printer
     {
-        public EpsonPrinter()
+        private string model = "Epson";
+
+        public EpsonPrinter(string name, string model) : base(name, model)
+        {            
+        }
+        
+        public override void Print(FileStream fileStream)
         {
-            Model = "231";
-            Name = "Epson";
+            Console.WriteLine($"Epson {this.Name} is printing...");
+
+            base.Print(fileStream);
         }
 
-        public void Print(FileStream fs)
+        public void Register(PrinterManager printerManager)
         {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
+            printerManager.Printing += StartPrinting;
         }
 
-        public string Name { get; set; }
+        public void Unregister(PrinterManager printerManager)
+        {
+            printerManager.Printing -= StartPrinting;
+        }
 
-        public string Model { get; set; }
+        public void StartPrinting(object sender, PrintEventArgs e)
+        {
+            Console.WriteLine($"Start printing, message: {e.PrintingArg}");
+        }
     }
 }
