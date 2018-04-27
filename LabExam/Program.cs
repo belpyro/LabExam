@@ -67,17 +67,18 @@ namespace LabExam
                 Console.WriteLine("Bad choice!");
             }
 
-            printerManager.Print(printerManager.Printers[key]);
+            Print(printerManager.Printers[key]);
         }
 
         private static void CreatePrinter()
         {
-            Console.WriteLine("Enter printer name");
-            string name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            string model = Console.ReadLine();
+            printerManager.Add();
+        }
 
-            printerManager.Add(new Printer(name, model));
+        private static void Print(Printer printer)
+        {
+
+            printerManager.Print(printer);
         }
     }
 }

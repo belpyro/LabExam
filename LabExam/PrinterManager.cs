@@ -37,6 +37,16 @@ namespace LabExam
 
         #region methods
 
+        public void Add()
+        {
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+
+            Add(new Printer(name, model));
+        }
+
         public void Add(Printer printer)
         {
             if (!printers.Contains(printer))
