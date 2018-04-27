@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ninject;
 
 namespace LabExam
 {
@@ -11,6 +12,9 @@ namespace LabExam
         [STAThread]
         static void Main(string[] args)
         {
+            var kernel = new StandardKernel(new ConfigModule());
+            var manager = kernel.Get<PrinterManager>();
+            IPrinterFactory factory = new PrinterFactory(manager);
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
@@ -20,17 +24,17 @@ namespace LabExam
 
             if (key.Key == ConsoleKey.D1)
             {
-                CreatePrinter();
+                factory.CreatePrinter();//UI, не должен знать процесс создания принтера
             }
 
             if (key.Key == ConsoleKey.D2)
             {
-                Print(new CanonPrinter());
+                Print(manager, new CanonPrinter());
             }
 
             if (key.Key == ConsoleKey.D3)
             {
-                Print(new EpsonPrinter());
+                Print(manager, new EpsonPrinter());
             }
 
             while (true)
@@ -39,21 +43,25 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(PrinterManager manager, Printer Printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            manager.Print(Printer);
+            manager.Log("Printed on Epson");
         }
 
-        private static void Print(CanonPrinter canonPrinter)
+        /*private static void Print(CanonPrinter canonPrinter)
         {
-            PrinterManager.Print(canonPrinter);
+            manager.Print(canonPrinter);
             PrinterManager.Log("Printed on Canon");
-        }
+        }*/
 
-        private static void CreatePrinter()
+        /*private static void CreatePrinter(PrinterManager manager)
         {
-            PrinterManager.Add(new Printer());
-        }
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+            manager.Add(new Printer() { Name = name, Model = model });
+        }*/
     }
 }

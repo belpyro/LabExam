@@ -1,0 +1,9 @@
+E:\Task2\LabExam\LabExam\obj\Debug\LabExam.csprojResolveAssemblyReference.cache
+E:\Task2\LabExam\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
+E:\Task2\LabExam\LabExam\bin\Debug\LabExam.exe.config
+E:\Task2\LabExam\LabExam\bin\Debug\LabExam.exe
+E:\Task2\LabExam\LabExam\bin\Debug\LabExam.pdb
+E:\Task2\LabExam\LabExam\bin\Debug\Ninject.dll
+E:\Task2\LabExam\LabExam\bin\Debug\Ninject.xml
+E:\Task2\LabExam\LabExam\obj\Debug\LabExam.exe
+E:\Task2\LabExam\LabExam\obj\Debug\LabExam.pdb
