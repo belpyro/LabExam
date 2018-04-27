@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LabExam
 {
     internal static class PrinterManager
     {
-        public static List<object> Printers { get; }
+        public static List<Printer> Printers { get; }
 
         public static event EventHandler<EventArgs> PrintingStarted;
         public static event EventHandler<EventArgs> PrintingFinished;
 
         static PrinterManager()
         {
-            Printers = new List<object>();
+            Printers = new List<Printer>();
         }
 
         public static void Add(Printer printer)
         {
-            if (Printers.Contains(printer)) return;
+            if (Printers.Any(p=> printer.Name == p.Name && printer.Model == p.Model)) Console.WriteLine("Printer already exists"); ;
             Printers.Add(printer);
             Console.WriteLine("Printer added");
         }
