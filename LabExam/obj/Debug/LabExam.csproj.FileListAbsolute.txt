@@ -1,0 +1,7 @@
+D:\Repos\LabExam\LabExam\bin\Debug\LabExam.exe.config
+D:\Repos\LabExam\LabExam\bin\Debug\LabExam.exe
+D:\Repos\LabExam\LabExam\bin\Debug\LabExam.pdb
+D:\Repos\LabExam\LabExam\obj\Debug\LabExam.csprojResolveAssemblyReference.cache
+D:\Repos\LabExam\LabExam\obj\Debug\LabExam.csproj.CoreCompileInputs.cache
+D:\Repos\LabExam\LabExam\obj\Debug\LabExam.exe
+D:\Repos\LabExam\LabExam\obj\Debug\LabExam.pdb

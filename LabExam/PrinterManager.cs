@@ -11,10 +11,13 @@ namespace LabExam
     {
         static PrinterManager()
         {
-            Printers = new List<object>();
+            //Printers = new List<Printer>();
+            Printers = new HashSet<Printer>();
         }
 
-        public static List<object> Printers { get; set; }
+        //public static List<object> Printers { get; set; }
+
+        public static HashSet<Printer> Printers { get; set; }
 
         public static void Add(Printer p1)
         {
@@ -23,24 +26,11 @@ namespace LabExam
             Console.WriteLine("Enter printer model");
             p1.Model = Console.ReadLine();
 
-            if (!Printers.Contains(p1))
-            {
-                Printers.Add(p1);
-                Console.WriteLine("Printer added");
-            }
+            Printers.Add(p1);
+            Console.WriteLine("Printer added");
         }
 
-        public static void Print(EpsonPrinter p1)
-        {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
-
-        public static void Print(CanonPrinter p1)
+        public static void Print(Printer p1)
         {
             Log("Print started");
             var o = new OpenFileDialog();
@@ -58,3 +48,4 @@ namespace LabExam
         public static event PrinterDelegate OnPrinted;
     }
 }
+
