@@ -25,35 +25,36 @@ namespace LabExam
 
             if (key.Key == ConsoleKey.D2)
             {
-                Print(new CanonPrinter());
+                Print(new Printer("Canon", "123x"));
             }
 
             if (key.Key == ConsoleKey.D3)
             {
-                Print(new EpsonPrinter());
+                Print(new Printer("Epson", "231"));
             }
+            for (int i = 2; i < PrinterManager.Printers.Count; i++)
+            {
 
+            }
             while (true)
             {
                 // waiting
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
-        }
-
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
+            PrinterManager.Print(printer);
+            PrinterManager.Log($"Печатается на {printer.Name}");
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Console.WriteLine("Enter printer name");
+            string Name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string Model = Console.ReadLine();
+            PrinterManager.Add(new Printer(Name, Model));
         }
     }
 }
