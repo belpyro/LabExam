@@ -3,25 +3,15 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class EpsonPrinter
+    internal class EpsonPrinter:AbstractPrinter
     {
         public EpsonPrinter()
         {
             Model = "231";
             Name = "Epson";
         }
+        public override string Name { get; set; }
 
-        public void Print(FileStream fs)
-        {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
-        }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
+        public override string Model { get; set; }
     }
 }
