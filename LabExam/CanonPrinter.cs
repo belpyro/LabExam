@@ -3,25 +3,36 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class CanonPrinter
+    // Impliments IPrinter for further extension or adding new printers
+    internal class CanonPrinter : Printer
     {
-        public CanonPrinter()
+              
+        public CanonPrinter(string name, string model) : base(name, model)
         {
-            Name = "Canon";
-            Model = "123x";
+
+        }             
+
+        // Overriding of Print method for determine printer
+        public override void Print(FileStream fileStream)
+        {
+            Console.WriteLine($"Canon {this.Name} is printing...");
+
+            base.Print(fileStream);
         }
 
-        public void Print(FileStream fs)
+        public void Register(PrinterManager printerManager)
         {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
+            printerManager.Printing += StartPrinting;
         }
 
-        public string Name { get; set; }
+        public void Unregister(PrinterManager printerManager)
+        {
+            printerManager.Printing -= StartPrinting;
+        }
 
-        public string Model { get; set; }
+        public void StartPrinting(object sender, PrintEventArgs e)
+        {
+            Console.WriteLine($"Start printing, message: {e.PrintingArg}");
+        }
     }
 }

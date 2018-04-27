@@ -43,9 +43,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanonPrinter.cs" />
+    <Compile Include="DefaultLogger.cs" />
     <Compile Include="EpsonPrinter.cs" />
+    <Compile Include="ILogger.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="PrinterManager.cs" />
+    <Compile Include="PrintEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

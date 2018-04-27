@@ -11,6 +11,7 @@ namespace LabExam
         [STAThread]
         static void Main(string[] args)
         {
+            
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
@@ -25,12 +26,12 @@ namespace LabExam
 
             if (key.Key == ConsoleKey.D2)
             {
-                Print(new CanonPrinter());
+                Print(PrinterManager.Printers.Where(p=>p.Model=="Canon").First());
             }
 
             if (key.Key == ConsoleKey.D3)
             {
-                Print(new EpsonPrinter());
+                Print(PrinterManager.Printers.Where(p => p.Model == "Epson").First());
             }
 
             while (true)
@@ -39,21 +40,16 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            ILogger standartLogger = new DefaultLogger();
+            PrinterManager.Print(printer, standartLogger);
+            standartLogger.Log($"Printed on {printer.Model} {printer.Name}");
         }
-
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
-
+        
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            PrinterManager.Add();
         }
     }
 }
