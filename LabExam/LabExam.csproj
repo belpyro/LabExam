@@ -42,10 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractPrinter.cs" />
+    <Compile Include="AddClass.cs" />
     <Compile Include="CanonPrinter.cs" />
     <Compile Include="EpsonPrinter.cs" />
+    <Compile Include="PrintClass.cs" />
     <Compile Include="Printer.cs" />
-    <Compile Include="PrinterManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
