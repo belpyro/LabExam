@@ -1,20 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using LabExam.Entity;
+using LabExam.Interfaces;
+using LabExam.Service;
+using Ninject;
 
 namespace LabExam
 {
     class Program
     {
+        private static readonly IPrinterManager manager;
+
+        private static readonly int index;
+
+        static Program()
+        {
+            var resolver = new StandardKernel();
+            resolver.ConfigurateResolver();
+            manager = resolver.Get<IPrinterManager>();
+            index = manager.GetAll().Count;
+        }
+
         [STAThread]
         static void Main(string[] args)
         {
+            GetMenu();
+        }
+
+        private static void GetMenu()
+        {
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
-            Console.WriteLine("2:Print on Canon");
-            Console.WriteLine("3:Print on Epson");
+            var index = 2;
+            foreach (BasePrinter item in manager.GetAll())
+            {
+                Console.WriteLine($"{index++}.Print in {item.Name} - {item.Model}");
+            }
 
             var key = Console.ReadKey();
 
@@ -23,14 +50,9 @@ namespace LabExam
                 CreatePrinter();
             }
 
-            if (key.Key == ConsoleKey.D2)
+            if (key.Key >= ConsoleKey.D2 || key.Key <= ConsoleKey.D2 + index)
             {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
+                Print(manager.GetAll()[(int)key.Key - (int)ConsoleKey.D2]);
             }
 
             while (true)
@@ -39,21 +61,30 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(BasePrinter printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
-        }
+            using (var dialog = new OpenFileDialog())
+            {
+                dialog.ShowDialog();
+                using (var fileStream = File.OpenRead(dialog.FileName))
+                {
+                    printer.Print(fileStream);
+                }
+            }
 
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
+            GetMenu();
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Console.WriteLine("Enter printer name");
+            var name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            var model = Console.ReadLine();
+            
+            manager.Add(name, model);
+
+            GetMenu();
         }
     }
 }

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms" />
@@ -43,14 +46,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CanonPrinter.cs" />
+    <Compile Include="Entity\BasePrinter.cs" />
+    <Compile Include="Entity\InfoPrintEventArgs.cs" />
     <Compile Include="EpsonPrinter.cs" />
-    <Compile Include="Printer.cs" />
-    <Compile Include="PrinterManager.cs" />
+    <Compile Include="Exceptions\ExistPrinterException.cs" />
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IPrinterManager.cs" />
+    <Compile Include="Entity\Printer.cs" />
+    <Compile Include="ResolverConfig.cs" />
+    <Compile Include="Service\Logger.cs" />
+    <Compile Include="Service\PrintManagerService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
