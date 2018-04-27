@@ -3,7 +3,10 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class CanonPrinter
+    /// <summary>
+    /// Implements IPrinter for printing. 
+    /// </summary>
+    internal class CanonPrinter : Printer
     {
         public CanonPrinter()
         {
@@ -11,17 +14,10 @@ namespace LabExam
             Model = "123x";
         }
 
-        public void Print(FileStream fs)
+        public CanonPrinter(string name, string model)
         {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
+            Name = name;
+            Model = model;
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

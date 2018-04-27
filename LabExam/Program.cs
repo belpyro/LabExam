@@ -1,59 +1,119 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace LabExam
 {
-    class Program
+    class Program : IView
     {
         [STAThread]
         static void Main(string[] args)
         {
-            Console.WriteLine("Select your choice:");
-            Console.WriteLine("1:Add new printer");
-            Console.WriteLine("2:Print on Canon");
-            Console.WriteLine("3:Print on Epson");
-
-            var key = Console.ReadKey();
-
-            if (key.Key == ConsoleKey.D1)
-            {
-                CreatePrinter();
-            }
-
-            if (key.Key == ConsoleKey.D2)
-            {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
-            }
-
             while (true)
             {
-                // waiting
+                Console.WriteLine("Select your choice:");
+                Console.WriteLine("1:Add new printer");
+                //Нужно убрать 2 и 3 пункт и вместо них добавить пункт "печать", в котором будет выбор принтера, а затем произведётся печать. Не сразу это заметил, поэтому не успел. 
+                Console.WriteLine("2:Print on Canon");
+                Console.WriteLine("3:Print on Epson");
+                Console.WriteLine("4:Show list of printers");
+                Console.WriteLine("Ecs:Exit\n");
+
+                var key = Console.ReadKey();
+
+                //instead of "if-construction"
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                        {
+                            CreatePrinter();
+                            break;
+                        }
+                    case ConsoleKey.D2:
+                        {
+                            Print(new CanonPrinter());
+                            break;
+                        }
+                    case ConsoleKey.D3:
+                        {
+                            Print(new EpsonPrinter());
+                            break;
+                        }
+                    case ConsoleKey.D4:
+                        {
+                            PrintListOfPrinters();
+                            break;
+                        }
+                    case ConsoleKey.Escape:
+                        {
+                            return;
+                        }
+                }
+
+                Console.WriteLine();
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            string fileName = "";
+            if (GetFile(ref fileName))
+            {
+                PrinterManager.Print(printer, fileName);
+            }
+            else
+            {
+                Console.WriteLine("Wrong FileName.");
+            }
         }
 
-        private static void Print(CanonPrinter canonPrinter)
+        private static bool GetFile(ref string fileName)
         {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
+            var o = new OpenFileDialog();
+            o.ShowDialog();
+            if (!String.IsNullOrEmpty(o.FileName))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Printer printer = new Printer();
+            try
+            {
+                Console.WriteLine("Enter printer name");
+                printer.Name = Console.ReadLine();
+                Console.WriteLine("Enter printer model");
+                printer.Model = Console.ReadLine();
+
+                if (PrinterManager.Add(printer))
+                {
+                    Console.WriteLine("Printer added.");
+                }
+                else
+                {
+                    Console.WriteLine("Printer already exists.");
+                }
+            }
+            catch(ArgumentNullException)
+            {
+                Console.WriteLine("Name or Model can't be empty!");
+            }
+        }
+
+        private static void PrintListOfPrinters()
+        {
+            if (PrinterManager.Printers.Count == 0)
+            {
+                Console.WriteLine("List is empty.");
+            }
+
+            foreach (Printer p in PrinterManager.Printers)
+            {
+                Console.WriteLine ("Name: {0}, Model: {1}.", p.Name, p.Model);
+            }
         }
     }
 }
