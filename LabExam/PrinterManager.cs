@@ -7,54 +7,82 @@ namespace LabExam
 {
     public delegate void PrinterDelegate(string arg);
 
-    internal static class PrinterManager
+    internal class PrinterManager
     {
-        static PrinterManager()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PrinterManager"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        public PrinterManager(ILogger logger = null)
         {
-            Printers = new List<object>();
+            if(ReferenceEquals(logger,null))
+            {
+                this.Logger = new CustomLogger();
+            }
+            else
+            {
+                this.Logger = logger;
+            }
+
+            Printers = new List<IPrinter>();
+            
         }
 
-        public static List<object> Printers { get; set; }
+        /// <summary>
+        /// Gets the logger.
+        /// </summary>
+        /// <value>
+        /// The logger.
+        /// </value>
+        public ILogger Logger { get; }
 
-        public static void Add(Printer p1)
+        /// <summary>
+        /// Gets or sets the printers.
+        /// </summary>
+        /// <value>
+        /// The printers.
+        /// </value>
+        private List<IPrinter> Printers { get; set; }
+
+        /// <summary>
+        /// Adds the specified p1.
+        /// </summary>
+        /// <param name="p1">The p1.</param>
+        /// <returns></returns>
+        public bool Add(IPrinter p1)
         {
-            Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
-
             if (!Printers.Contains(p1))
             {
                 Printers.Add(p1);
-                Console.WriteLine("Printer added");
+                return true;
             }
+
+            return false;
         }
 
-        public static void Print(EpsonPrinter p1)
+        /// <summary>
+        /// Prints the specified p1.
+        /// </summary>
+        /// <param name="p1">The p1.</param>
+        /// <exception cref="ArgumentNullException">Printer is null!</exception>
+        public void Print(IPrinter p1)
         {
-            Log("Print started");
+            if (ReferenceEquals(p1, null))
+            {
+                throw new ArgumentNullException("Printer is null!");
+            }
+
+            Logger.Log("Print started");
             var o = new OpenFileDialog();
             o.ShowDialog();
             var f = File.OpenRead(o.FileName);
             p1.Print(f);
-            Log("Print finished");
+            Logger.Log("Print finished");
         }
 
-        public static void Print(CanonPrinter p1)
-        {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
-
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
-        }
-
+        /// <summary>
+        /// Occurs when [on printed].
+        /// </summary>
         public static event PrinterDelegate OnPrinted;
     }
 }
