@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabExam
 {
@@ -39,21 +35,27 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            PrinterManager.Print(printer);
+            PrinterManager.Log($"Printed on {printer.Name}");
         }
 
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
+        //private static void Print(EpsonPrinter epsonPrinter)
+        //{
+        //    PrinterManager.Print(epsonPrinter);
+        //    PrinterManager.Log("Printed on Epson");
+        //}
+
+        //private static void Print(CanonPrinter canonPrinter)
+        //{
+        //    PrinterManager.Print(canonPrinter);
+        //    PrinterManager.Log("Printed on Canon");
+        //}
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            PrinterManager.Add();
         }
     }
 }

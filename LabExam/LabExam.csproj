@@ -44,6 +44,9 @@
   <ItemGroup>
     <Compile Include="CanonPrinter.cs" />
     <Compile Include="EpsonPrinter.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="IPrint.cs" />
     <Compile Include="Printer.cs" />
     <Compile Include="PrinterManager.cs" />
     <Compile Include="Program.cs" />
