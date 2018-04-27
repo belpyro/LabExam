@@ -3,7 +3,7 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class EpsonPrinter
+    internal class EpsonPrinter : Printer
     {
         public EpsonPrinter()
         {
@@ -11,17 +11,10 @@ namespace LabExam
             Name = "Epson";
         }
 
-        public void Print(FileStream fs)
+        // возможность задания модели
+        public EpsonPrinter(string model) : this()
         {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
+            Model = model;
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

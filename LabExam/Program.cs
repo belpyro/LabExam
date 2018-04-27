@@ -39,17 +39,13 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
-        {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+        private static void Print(Printer printer)
+        {   
+            var manager = new PrinterManager();
+            manager.Print(printer);
+            PrinterManager.Log($"Printed on ");
         }
-
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
+        
 
         private static void CreatePrinter()
         {

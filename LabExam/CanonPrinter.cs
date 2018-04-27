@@ -1,9 +1,8 @@
 ﻿using System;
-using System.IO;
 
 namespace LabExam
 {
-    internal class CanonPrinter
+    internal class CanonPrinter : Printer
     {
         public CanonPrinter()
         {
@@ -11,17 +10,10 @@ namespace LabExam
             Model = "123x";
         }
 
-        public void Print(FileStream fs)
+        //возможность задания модели
+        public CanonPrinter(string model) : this()
         {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
+            Model = model ?? throw new ArgumentNullException($"{nameof(model)} cannot be null.");
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }
