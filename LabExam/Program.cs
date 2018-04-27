@@ -1,59 +1,51 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabExam
 {
-    class Program
+    internal class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
             Console.WriteLine("3:Print on Epson");
+            Console.WriteLine("Escape:To exit");
 
-            var key = Console.ReadKey();
+            ConsoleKey key;
 
-            if (key.Key == ConsoleKey.D1)
+            while (true)//the loop introdused so a user could do more than one operation
             {
-                CreatePrinter();
+                key = Console.ReadKey().Key;
+
+                switch (key)
+                {
+                    case ConsoleKey.D1:
+                        CreatePrinter();
+                        break;
+                    case ConsoleKey.D2:
+                        new CanonPrinter().Print();
+                        break;
+                    case ConsoleKey.D3:
+                        new EpsonPrinter().Print();
+                        break;
+                    case ConsoleKey.Escape:
+                        return;
+                    default:
+                        Console.WriteLine("The operation is not supported");
+                        break;
+                }
             }
-
-            if (key.Key == ConsoleKey.D2)
-            {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
-            }
-
-            while (true)
-            {
-                // waiting
-            }
-        }
-
-        private static void Print(EpsonPrinter epsonPrinter)
-        {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
-        }
-
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+            PrinterManager.Add(new Printer(model, name));
         }
     }
 }
