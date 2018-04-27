@@ -6,10 +6,10 @@ namespace LabExam
     /// <summary>
     /// Class for logging
     /// </summary>
-    internal static class Logger
+    internal static class Logger//Was added as a seperate class as logging as a separate responsibility 
     {
         /// <summary>
-        /// Static constructor for subcrubing to the printer events
+        /// Static constructor for subcrubing to the printermanger' events
         /// </summary>
         static Logger()
         {
@@ -18,7 +18,7 @@ namespace LabExam
         }
 
         /// <summary>
-        /// 
+        /// Handles event of a print start
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="eventArgs"></param>
@@ -27,11 +27,20 @@ namespace LabExam
             Log("Print started");
         }
 
+        /// <summary>
+        /// Handles event of a print finishs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private static void LogFinishedPrinting(object sender, EventArgs eventArgs)
         {
             Log("Print finished");
         }
 
+        /// <summary>
+        /// Writes logs to a file
+        /// </summary>
+        /// <param name="s">Log message</param>
         public static void Log(string s)
         {
             File.AppendText("log.txt").Write(s);

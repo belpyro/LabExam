@@ -15,7 +15,7 @@ namespace LabExam
 
             ConsoleKey key;
 
-            while (true)//the loop introdused so a user could do more than one operation
+            while (true)//the loop introduced so a user could do more than one operation
             {
                 key = Console.ReadKey().Key;
 
@@ -30,10 +30,10 @@ namespace LabExam
                     case ConsoleKey.D3:
                         new EpsonPrinter().Print();
                         break;
-                    case ConsoleKey.Escape:
+                    case ConsoleKey.Escape://exit from the program
                         return;
                     default:
-                        Console.WriteLine("The operation is not supported");
+                        Console.WriteLine("The operation is not supported");//check for unsupported operations
                         break;
                 }
             }
