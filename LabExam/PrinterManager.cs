@@ -62,7 +62,7 @@ namespace LabExam
 
         public void Print(Printer printer)
         {
-            logger.Log("Print started");
+            logger.Log($"Print({printer}) started");
             OnPrintStarted(new PrinterEventArgs(printer));
 
             var printedFileDialog = new OpenFileDialog();
@@ -71,7 +71,7 @@ namespace LabExam
             var printedFile = File.OpenRead(printedFileDialog.FileName);
             printer.Print(printedFile);
 
-            logger.Log("Print finished");
+            logger.Log($"Print({printer}) finished");
             OnPrintEnded(new PrinterEventArgs(printer));
         }
 

@@ -20,7 +20,14 @@ namespace LabExam
             {
                 ListOfChoises();
 
-                var key = Int32.Parse(Console.ReadLine());
+                int key;
+                bool isSucces = Int32.TryParse(Console.ReadLine(), out key);
+
+                if (!isSucces)
+                {
+                    InputError();
+                    continue;
+                }
 
                 HandleChoice(key);
 
@@ -64,7 +71,8 @@ namespace LabExam
 
             if (key >= printerManager.Printers.Length)
             {
-                Console.WriteLine("Bad choice!");
+                InputError();
+                return;
             }
 
             Print(printerManager.Printers[key]);
@@ -77,8 +85,16 @@ namespace LabExam
 
         private static void Print(Printer printer)
         {
-
+            printerManager.PrintStarted += (sender, args) => Console.WriteLine($"{args.Printer} started printing");
+            printerManager.PrintEnded += (sender, args) => Console.WriteLine($"{args.Printer} ended printing");
             printerManager.Print(printer);
+            
+
+        }
+
+        private static void InputError()
+        {
+            Console.WriteLine("Input Error!");
         }
     }
 }
