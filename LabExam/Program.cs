@@ -25,12 +25,12 @@ namespace LabExam
 
             if (key.Key == ConsoleKey.D2)
             {
-                Print(new CanonPrinter());
+                Print(new Printer("Canon","123x"));
             }
 
             if (key.Key == ConsoleKey.D3)
             {
-                Print(new EpsonPrinter());
+                Print(new Printer("Epson","231"));
             }
 
             while (true)
@@ -39,21 +39,21 @@ namespace LabExam
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            PrinterManager.Print(printer);
+            PrinterManager.Log($"Printed on :{printer.Name},{printer.Model}");
         }
 
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
-
+      
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+
+            PrinterManager.Add(new Printer(name,model));
         }
     }
 }
