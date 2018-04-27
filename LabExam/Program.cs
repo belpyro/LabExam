@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,52 +9,75 @@ namespace LabExam
 {
     class Program
     {
+        private static PrinterManager printerManager;
+
         [STAThread]
         static void Main(string[] args)
         {
-            Console.WriteLine("Select your choice:");
-            Console.WriteLine("1:Add new printer");
-            Console.WriteLine("2:Print on Canon");
-            Console.WriteLine("3:Print on Epson");
-
-            var key = Console.ReadKey();
-
-            if (key.Key == ConsoleKey.D1)
-            {
-                CreatePrinter();
-            }
-
-            if (key.Key == ConsoleKey.D2)
-            {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
-            }
+            Config();
 
             while (true)
             {
-                // waiting
+                ListOfChoises();
+
+                var key = Int32.Parse(Console.ReadLine());
+
+                HandleChoice(key);
+
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+       
+
+        private static void Config()
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            string pathToLog = ConfigurationSettings.AppSettings["pathToLog"];
+            printerManager = new PrinterManager(new FileLogger(pathToLog));
+
+            printerManager.Add(new Printer("Canon", "123x"));
+            printerManager.Add(new Printer("Epson", "231"));
         }
 
-        private static void Print(CanonPrinter canonPrinter)
+        private static void ListOfChoises()
         {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
+            Console.WriteLine("Select your choice:");
+
+            Console.WriteLine("0:Add new printer");
+
+            Printer[] printers = printerManager.Printers;
+
+            for (int i = 0; i < printers.Length; i++)
+            {
+                Console.WriteLine($"{i + 1}.{printers[i]}");
+            }
+        }
+
+        private static void HandleChoice(int key)
+        {
+            if (key == 0)
+            {
+                CreatePrinter();
+                return;
+            }
+
+            key--;
+
+            if (key >= printerManager.Printers.Length)
+            {
+                Console.WriteLine("Bad choice!");
+            }
+
+            printerManager.Print(printerManager.Printers[key]);
         }
 
         private static void CreatePrinter()
         {
-            PrinterManager.Add(new Printer());
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+
+            printerManager.Add(new Printer(name, model));
         }
     }
 }
