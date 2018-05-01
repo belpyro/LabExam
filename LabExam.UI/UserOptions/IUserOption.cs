@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LabExam.Logging
-{ 
-    public interface ILogger
+namespace LabExam.UI.UserOptions
+{
+    public interface IUserOption
     {
-        void Log(string message);
+        string ShowOption();
+        void Action();
     }
 }

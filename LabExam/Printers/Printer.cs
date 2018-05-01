@@ -2,21 +2,31 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace LabExam
+namespace LabExam.Logic
 {
     //when struct it can be created being in the invalid state
-    internal class Printer
+    public class Printer
     {
         public string Name { get; }
         public string Model { get; }
 
         public Printer(string name, string model)
         {
-            this.Name = name ?? throw new ArgumentNullException($"{nameof(name)} is null");
-            this.Model = model ?? throw new ArgumentNullException($"{nameof(model)} is null");
+            if (String.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException($"{nameof(name)} is null or empty");
+            }
+
+            if (String.IsNullOrEmpty(model))
+            {
+                throw new ArgumentException($"{nameof(model)} is null or empty");
+            }
+
+            this.Name = name;
+            this.Model = model;
         }
 
-        public void Print(FileStream fs)
+        internal virtual void Print(FileStream fs)
         {
             for (int i = 0; i < fs.Length; i++)
             {
