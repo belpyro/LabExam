@@ -47,13 +47,10 @@ namespace LabExam.Service
             if (model == null)
                 throw new ArgumentNullException($"Argument {nameof(model)} is null");
 
-            var resultFind = printers.FirstOrDefault(item => item.Name.Equals(name, StringComparison.CurrentCulture)
-                        && item.Model.Equals(model, StringComparison.CurrentCulture));
-
-            if (resultFind != null)
-                throw new ExistPrinterException($"Printer with the same parametrs {nameof(name)} and {nameof(model)} already exist");
-
             var printer = new Printer(name, model);
+
+            if (this.Contains(printer))
+                throw new ExistPrinterException($"Printer with the same parametrs {nameof(name)} and {nameof(model)} already exist");
 
             printer.PrintEvent += PrintEventHandler;
 
@@ -73,7 +70,17 @@ namespace LabExam.Service
             if (stream == null)
                 throw new ArgumentNullException($"Argument {nameof(printer)} is null");
 
+            if(!this.Contains(printer))
+                throw new InvalidOperationException($"Printer {nameof(printer)} is absent in list. Please add new printer and than print");
+
             printer.Print(stream);
+        }
+
+        public bool Contains(BasePrinter printer)
+        {
+            var equalityComparer = EqualityComparer<BasePrinter>.Default;
+
+            return this.Printers.Contains(printer, equalityComparer);
         }
     }
 }
