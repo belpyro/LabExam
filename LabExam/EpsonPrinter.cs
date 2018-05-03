@@ -1,27 +1,10 @@
-﻿using System;
-using System.IO;
-
-namespace LabExam
+﻿namespace LabExam
 {
-    internal class EpsonPrinter
+    internal class EpsonPrinter : Printer
     {
-        public EpsonPrinter()
+        public EpsonPrinter() : base("231", "Epson")//calls Printer's constrctor with needed parameters, nothing else needed as buisness logic is the same as in the parrent class
         {
-            Model = "231";
-            Name = "Epson";
         }
 
-        public void Print(FileStream fs)
-        {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
-        }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

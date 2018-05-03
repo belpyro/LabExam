@@ -1,27 +1,12 @@
-﻿using System;
-using System.IO;
-
-namespace LabExam
+﻿namespace LabExam
 {
-    internal class CanonPrinter
+    /// <summary>
+    /// Canon Printer
+    /// </summary>
+    internal class CanonPrinter : Printer
     {
-        public CanonPrinter()
+        public CanonPrinter() : base("Canon", "123x")//calls Printer's constrctor with needed parameters, nothing else needed as buisness logic is the same as in the parrent class
         {
-            Name = "Canon";
-            Model = "123x";
         }
-
-        public void Print(FileStream fs)
-        {
-            for (int i = 0; i < fs.Length; i++)
-            {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
-            }
-        }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

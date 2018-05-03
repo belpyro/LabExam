@@ -1,59 +1,85 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LabExam
 {
-    class Program
+    internal class Program
     {
         [STAThread]
-        static void Main(string[] args)
+        private static void Main(string[] args)
+        {
+            string command;
+
+            while (true)//the loop introduced so a user could do more than one operation
+            {
+                ShowMenu();
+
+                command = Console.ReadLine();
+
+                Execute(command);
+            }
+        }
+
+        private static void Execute(string command)
+        {
+            int index;
+            const int defautlNumberofOperations = 4;
+
+            if (!Int32.TryParse(command, out index))
+            {
+                Console.WriteLine("Invalid operation");
+                Console.ReadKey();
+                return;
+            }
+
+            if (index >= PrinterManager.Printers.Count + defautlNumberofOperations)
+            {
+                Console.WriteLine("The operation is not supported");
+                Console.ReadKey();
+                return;
+            }
+
+            switch (index)
+            {
+                case 1:
+                    CreatePrinter();
+                    break;
+                case 2:
+                    new CanonPrinter().Print();
+                    break;
+                case 3:
+                    new EpsonPrinter().Print();
+                    break;
+                case -1://exit from the program
+                    return;
+                default:
+                    PrinterManager.Printers.ElementAt(index - defautlNumberofOperations).Print();
+                    break;
+            }
+        }
+
+        private static void CreatePrinter()
+        {
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+            PrinterManager.Add(new Printer(model, name));
+        }
+
+        private static void ShowMenu()
         {
             Console.WriteLine("Select your choice:");
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
             Console.WriteLine("3:Print on Epson");
+            Console.WriteLine("-1:To exit");
 
-            var key = Console.ReadKey();
-
-            if (key.Key == ConsoleKey.D1)
+            int i = 3;
+            foreach (var printer in PrinterManager.Printers)
             {
-                CreatePrinter();
-            }
-
-            if (key.Key == ConsoleKey.D2)
-            {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
-            }
-
-            while (true)
-            {
-                // waiting
+                Console.WriteLine(++i + ":Print on " + printer.Name);
             }
         }
-
-        private static void Print(EpsonPrinter epsonPrinter)
-        {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
-        }
-
-        private static void Print(CanonPrinter canonPrinter)
-        {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
-
-        private static void CreatePrinter()
-        {
-            PrinterManager.Add(new Printer());
-        }
-    }
+}
 }

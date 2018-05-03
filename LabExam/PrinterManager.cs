@@ -1,60 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace LabExam
 {
-    public delegate void PrinterDelegate(string arg);
-
+    /// <summary>
+    /// Printer manager class
+    /// </summary>
     internal static class PrinterManager
     {
+        private static List<Printer> printers;//so printers list cannot be changed
+
+        public static IReadOnlyCollection<Printer> Printers => printers.AsReadOnly(); //so printers list cannot be changed
+        public static event EventHandler<EventArgs> PrintingStarted; ///event for printing started
+        public static event EventHandler<EventArgs> PrintingFinished; //ecent for printing finished
+
         static PrinterManager()
         {
-            Printers = new List<object>();
+            printers = new List<Printer>();
         }
 
-        public static List<object> Printers { get; set; }
-
-        public static void Add(Printer p1)
+        public static void Add(Printer printer)
         {
-            Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
-
-            if (!Printers.Contains(p1))
-            {
-                Printers.Add(p1);
-                Console.WriteLine("Printer added");
-            }
+            if (Printers.Any(p=> printer.Name == p.Name && printer.Model == p.Model)) Console.WriteLine("Printer already exists"); ;//check if there is a printer with the same name and model number
+            printers.Add(printer);
+            Console.WriteLine("Printer added");
         }
 
-        public static void Print(EpsonPrinter p1)
+        /// <summary>
+        /// Calls subscribers when printing started
+        /// </summary>
+        /// <param name="e"></param>
+        private static void OnPriningStarted(EventArgs e)
         {
-            Log("Print started");
+            PrintingStarted?.Invoke(null, e);
+        }
+
+        /// <summary>
+        /// Calls subscribers when printing finished
+        /// </summary>
+        /// <param name="e"></para
+        private static void OnPriningfinished(EventArgs e)
+        {
+            PrintingFinished?.Invoke(null, e);
+        }
+
+        public static void Print(this Printer printer)//extension method for printing
+        {
+            OnPriningStarted(null);
             var o = new OpenFileDialog();
             o.ShowDialog();
             var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
+            printer.Print(f);
+            OnPriningfinished(null);
 
-        public static void Print(CanonPrinter p1)
-        {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            Logger.Log("Printed on " + printer.Name);
         }
-
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
-        }
-
-        public static event PrinterDelegate OnPrinted;
     }
 }
