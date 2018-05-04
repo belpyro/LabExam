@@ -1,0 +1,3 @@
+Started to printPrinting finishedStarted to print
+Printing finished
+Started to printPrinting finishedStarted to printPrinting finishedPrinter addedStarted to printPrinting finished

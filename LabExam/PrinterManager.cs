@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -7,54 +8,67 @@ namespace LabExam
 {
     public delegate void PrinterDelegate(string arg);
 
-    internal static class PrinterManager
+    internal class PrinterManager
     {
-        static PrinterManager()
+        /// <summary>
+        /// ILogger for adding any loggers that need.
+        /// </summary>
+        private readonly ILogger logger;
+        public PrinterManager(ILogger logger)
         {
-            Printers = new List<object>();
+            this.logger = logger;
+            Printers = new List<Printer>();
         }
 
-        public static List<object> Printers { get; set; }
+        public List<Printer> Printers { get; private set; }
 
-        public static void Add(Printer p1)
+        /// <summary>
+        /// created Events 
+        /// </summary>
+        public event EventHandler<PrinterEventArgs> StateChanged = delegate { };
+
+        public void Add(Printer printer)
         {
-            Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
-
-            if (!Printers.Contains(p1))
+            if (!Printers.Contains(printer))
             {
-                Printers.Add(p1);
-                Console.WriteLine("Printer added");
+                Printers.Add(printer);
+                logger.Log("Printer added");
+
+            }
+            else
+            {
+                logger.Log("Printer already exist");
+                throw new ArgumentException($"{(printer)} already exist!");
             }
         }
 
-        public static void Print(EpsonPrinter p1)
+        /// <summary>
+        /// Change from specific printes to IPrinter
+        /// for improving flexibility.
+        /// </summary>
+        /// <param name="printer"></param>
+        public void Print(Printer printer)
         {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            if (!Printers.Contains(printer))
+            {
+                Printers.Add(printer);
+            }
+
+            logger.Log("Started to print");
+            OnPrintChanged(new PrinterEventArgs(printer, "Started"));
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ShowDialog();
+
+            var textOfFile = File.OpenRead(fileDialog.FileName);
+            printer.Print(textOfFile);
+
+            logger.Log("Printing finished");
+            OnPrintChanged(new PrinterEventArgs(printer, "Ended"));
         }
 
-        public static void Print(CanonPrinter p1)
+        protected virtual void OnPrintChanged(PrinterEventArgs args)
         {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            StateChanged(this, args);
         }
-
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
-        }
-
-        public static event PrinterDelegate OnPrinted;
     }
 }
