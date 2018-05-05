@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LabExam.UI
 {
-    public class ConsoleManager
+    public sealed class ConsoleManager
     {
         #region fields
         private PrinterManager printerManager;

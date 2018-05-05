@@ -39,6 +39,8 @@ namespace LabExam.Logic
             if (!printers.Contains(printer))
             {
                 printers.Add(printer);
+                printer.PrintStarted += (sender,args) => logger.Log($"Print({sender}) started");
+                printer.PrintEnded += (sender, args) => logger.Log($"Print({sender}) ended");
             }
             else
             {
@@ -46,27 +48,19 @@ namespace LabExam.Logic
             }
         }
 
-        public void Print(Printer printer, FileStream printedFile)
+        public void Print(Printer printer, Stream printedStream)
         {
-            logger.Log($"Print({printer}) started");
-            OnPrintStateChanged(new PrinterEventArgs(printer, "Start"));
+            if (Printers.Contains(printer))
+            {
+                printer.Print(printedStream);
+            }
+            else
+            {
+                throw new PrinterDoesntExistException($"{printer} doesnt exist");
+            }
 
-            printer.Print(printedFile);
-
-            logger.Log($"Print({printer}) finished");
-            OnPrintStateChanged(new PrinterEventArgs(printer, "End"));
         }
 
-        #endregion
-
-        #region events
-        //to follow the protocol for events
-        public event EventHandler<PrinterEventArgs> PrintStateChanged = delegate { };
-
-        private void OnPrintStateChanged(PrinterEventArgs args)
-        {
-            PrintStateChanged(this, args);
-        }
         #endregion
     }
 }

@@ -18,13 +18,6 @@ namespace LabExam.UI.UserOptions
         {
             this.printer = printer ?? throw new ArgumentNullException($"{printer} is null");
             this.printerManager = printerManager ?? throw new ArgumentNullException($"{printerManager} is null");
-
-            printerManager.PrintStateChanged += OnPrintStateChanged;
-        }
-
-        private void OnPrintStateChanged(object sender, PrinterEventArgs e)
-        {
-            Console.WriteLine($"{e.Printer} {e.Message}");
         }
 
         public void Action()
@@ -40,11 +33,6 @@ namespace LabExam.UI.UserOptions
         public string ShowOption()
         {
             return printer.ToString();
-        }
-
-        ~PrinterOption()
-        {
-            printerManager.PrintStateChanged -= OnPrintStateChanged;
         }
     }
 }

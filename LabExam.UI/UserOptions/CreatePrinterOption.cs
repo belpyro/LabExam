@@ -37,14 +37,14 @@ namespace LabExam.UI.UserOptions
                 try
                 {
                     newPrinter = new Printer(name, model);
+                    printerManager.Add(newPrinter);
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                     continue;
                 }
-
-                printerManager.Add(newPrinter);
+                
                 consoleManager.AddUserOption(new PrinterOption(printerManager, newPrinter));
 
                 break;
