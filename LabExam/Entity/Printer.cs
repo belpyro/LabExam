@@ -22,8 +22,6 @@ namespace LabExam.Entity
         /// <param name="stream">stream for print</param>
         protected override void CurrentPrint(Stream stream)
         {
-
-
             for (int i = 0; i < stream.Length; i++)
             {
                 // simulate printing

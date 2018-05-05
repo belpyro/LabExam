@@ -29,6 +29,9 @@ namespace LabExam
             GetMenu();
         }
 
+        /// <summary>
+        /// Get menu and check choose user
+        /// </summary>
         private static void GetMenu()
         {
             Console.WriteLine("Select your choice:");
@@ -72,6 +75,10 @@ namespace LabExam
             }
         }
 
+        /// <summary>
+        /// Print data in printer
+        /// </summary>
+        /// <param name="printer"></param>
         private static void Print(BasePrinter printer)
         {
             try
@@ -94,6 +101,9 @@ namespace LabExam
             GetMenu();
         }
 
+        /// <summary>
+        /// Create new printer
+        /// </summary>
         private static void CreatePrinter()
         {
             Console.WriteLine("Enter printer name");
