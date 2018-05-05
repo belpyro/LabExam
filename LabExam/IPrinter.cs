@@ -13,6 +13,6 @@ namespace LabExam
     /// </summary>
     interface IPrinter
     {
-        void Print(FileStream fs);
+        void Print(Stream stream);
     }
 }

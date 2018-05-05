@@ -6,8 +6,6 @@ using System.Windows.Forms;
 
 namespace LabExam
 {
-    public delegate void PrinterDelegate(string arg);
-
     internal class PrinterManager
     {
         /// <summary>
@@ -21,12 +19,7 @@ namespace LabExam
         }
 
         public List<Printer> Printers { get; private set; }
-
-        /// <summary>
-        /// created Events 
-        /// </summary>
-        public event EventHandler<PrinterEventArgs> StateChanged = delegate { };
-
+        
         public void Add(Printer printer)
         {
             if (!Printers.Contains(printer))
@@ -54,21 +47,14 @@ namespace LabExam
                 Printers.Add(printer);
             }
 
-            logger.Log("Started to print");
-            OnPrintChanged(new PrinterEventArgs(printer, "Started"));
+            logger.Log($"{(printer)} started to print!");
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.ShowDialog();
 
             var textOfFile = File.OpenRead(fileDialog.FileName);
             printer.Print(textOfFile);
 
-            logger.Log("Printing finished");
-            OnPrintChanged(new PrinterEventArgs(printer, "Ended"));
-        }
-
-        protected virtual void OnPrintChanged(PrinterEventArgs args)
-        {
-            StateChanged(this, args);
+            logger.Log($"{(printer)} finished to print!");
         }
     }
 }

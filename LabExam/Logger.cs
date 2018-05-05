@@ -31,6 +31,11 @@ namespace LabExam
 
         public void Log(string message)
         {
+            if (!File.Exists(PathToFile))
+            {
+                File.Create(PathToFile);
+            }
+
             using (var file = File.AppendText(PathToFile))
             {
                 file.Write(message);

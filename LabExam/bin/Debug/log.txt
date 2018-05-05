@@ -1,3 +1,1 @@
-Started to printPrinting finishedStarted to print
-Printing finished
-Started to printPrinting finishedStarted to printPrinting finishedPrinter addedStarted to printPrinting finished
+1 - Canon started to print!1 - Canon finished to print!1 - Canon started to print!1 - Canon finished to print!2 - Epson started to print!2 - Epson finished to print!1 - Canon started to print!1 - Canon finished to print!Printer added

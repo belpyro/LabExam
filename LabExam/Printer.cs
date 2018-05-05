@@ -18,6 +18,11 @@ namespace LabExam
         {
         }
 
+        /// <summary>
+        /// created Events 
+        /// </summary>
+        public event EventHandler<PrinterEventArgs> StateChanged = delegate { };
+
         public Printer(string name, string model)
         {
             this.Name = name ?? throw new ArgumentNullException($"{nameof(name)} cant be a null");
@@ -49,16 +54,24 @@ namespace LabExam
             return hashCode;
         }
 
-        public void Print(FileStream fs)
+        public void Print(Stream stream)
         {
-            for (int i = 0; i < fs.Length; i++)
+            OnStartedPrint();
+            
+            for (int i = 0; i < stream.Length; i++)
             {
-                Console.WriteLine(fs.ReadByte());
+                Console.WriteLine(stream.ReadByte());
             }
+
+            OnEndedPrint();
         }
         public override string ToString()
         {
             return $"{Name} - {Model}";
         }
+
+        protected virtual void OnStartedPrint() => StateChanged?.Invoke(this, new PrinterEventArgs(this, "Started"));
+
+        protected virtual void OnEndedPrint() => StateChanged?.Invoke(this, new PrinterEventArgs(this, "Ended"));
     }
 }
