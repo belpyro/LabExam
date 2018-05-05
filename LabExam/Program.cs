@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LabExam
 {
-    class Program
+    public static class Program
     {
         [STAThread]
         static void Main(string[] args)
@@ -15,45 +15,59 @@ namespace LabExam
             Console.WriteLine("1:Add new printer");
             Console.WriteLine("2:Print on Canon");
             Console.WriteLine("3:Print on Epson");
-
-            var key = Console.ReadKey();
-
-            if (key.Key == ConsoleKey.D1)
-            {
-                CreatePrinter();
-            }
-
-            if (key.Key == ConsoleKey.D2)
-            {
-                Print(new CanonPrinter());
-            }
-
-            if (key.Key == ConsoleKey.D3)
-            {
-                Print(new EpsonPrinter());
-            }
+            string pathToFile = "D:\\Epam\\Epam.ASP.NET\\LabExam\\LabExam\\bin\\Debug\\log.txt";
+            ILogger logger = new Logger(pathToFile);
+            PrinterManager manager = new PrinterManager(logger);
 
             while (true)
             {
-                // waiting
+                var key = Console.ReadKey();
+                if (key.Key == ConsoleKey.D1)
+                {
+                    manager.CreatePrinter();
+                }
+
+                if (key.Key == ConsoleKey.D2)
+                {
+                    manager.Print(new Printer("1","Canon"));
+                }
+
+                if (key.Key == ConsoleKey.D3)
+                {
+                    manager.Print(new Printer("2","Epson"));
+                }
+
+                for (int i = 0; i < manager.Printers.Count; i++)
+                {
+                    Console.WriteLine("Printers " + i + ' ' + " Name: " + manager.Printers[i].Name + " Model: " + manager.Printers[i].Model);
+                }
             }
         }
 
-        private static void Print(EpsonPrinter epsonPrinter)
+        private static void Print(this PrinterManager manager, Printer printer)
         {
-            PrinterManager.Print(epsonPrinter);
-            PrinterManager.Log("Printed on Epson");
+            if(manager == null || printer == null)
+            {
+                throw new ArgumentNullException($"{(nameof(manager))} cant be a null");
+            }
+            if (printer == null)
+            {
+                throw new ArgumentNullException($"{(nameof(printer))} cant be a null");
+            }
+
+            Console.WriteLine(printer.GetType());
+            manager.Print(printer);
         }
 
-        private static void Print(CanonPrinter canonPrinter)
+        private static void CreatePrinter(this PrinterManager manager)
         {
-            PrinterManager.Print(canonPrinter);
-            PrinterManager.Log("Printed on Canon");
-        }
+            Console.WriteLine("Enter printer name");
+            string name = Console.ReadLine();
+            Console.WriteLine("Enter printer model");
+            string model = Console.ReadLine();
+            Printer printer = new Printer(name, model);
 
-        private static void CreatePrinter()
-        {
-            PrinterManager.Add(new Printer());
+            manager.Add(printer);
         }
     }
 }
