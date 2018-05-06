@@ -9,6 +9,13 @@ namespace LabExam
 {
     public class FileLogger : ILogger
     {
+        private readonly string fileName;
+
+        public FileLogger(string fileName)
+        {
+            this.fileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
+        }
+
         public void Log(string s)
         {
             if (s == null)
@@ -16,7 +23,12 @@ namespace LabExam
                 throw new ArgumentNullException();
             }
 
-            File.AppendText("log.txt").Write(s);
+            if (!File.Exists(fileName))
+            {
+                throw new ArgumentException(nameof(fileName));
+            }
+
+            File.AppendText(fileName).Write(s);
         }
     }
 }

@@ -5,10 +5,22 @@ namespace LabExam
 {
     internal class CanonPrinter : Printer
     {
-        public CanonPrinter()
+        public CanonPrinter(string name, string model): base(name, model) { }
+
+        protected override void EmulatePrint(Stream stream)
         {
-            Name = "Canon";
-            Model = "123x";
+            if (stream == null) 
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (stream)
+            {
+                for (int i = 0; i < stream.Length; i++)
+                {
+                    stream.ReadByte();
+                }
+            }
         }
     }
 }

@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace LabExam
 {
-    public class PrinterFactory : IPrinterFactory
+    public class PrinterFactory
     {
-        private PrinterManager manager;
-
-        public PrinterFactory(PrinterManager manager)
+        public void CreatePrinter(string name, string model)
         {
-            this.manager = manager;
-        }
-
-        public void CreatePrinter()
-        {
-            Console.WriteLine("Enter printer name");
-            string name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            string model = Console.ReadLine();
-            manager.Add(new Printer() { Name = name, Model = model });
+            switch (model)
+            {
+                case "Canon":
+                    PrinterManager.Instance.Add(new CanonPrinter(name, model));
+                    break;
+                case "Epson":
+                    PrinterManager.Instance.Add(new EpsonPrinter(name, model));
+                    break;
+                default:
+                    throw new InvalidOperationException("there is no such model");
+                    break;
+            }
         }
     }
 }
