@@ -3,25 +3,24 @@ using System.IO;
 
 namespace LabExam
 {
-    internal class CanonPrinter
+    internal class CanonPrinter : Printer
     {
-        public CanonPrinter()
-        {
-            Name = "Canon";
-            Model = "123x";
-        }
+        public CanonPrinter(string name, string model): base(name, model) { }
 
-        public void Print(FileStream fs)
+        protected override void EmulatePrint(Stream stream)
         {
-            for (int i = 0; i < fs.Length; i++)
+            if (stream == null) 
             {
-                // simulate printing
-                Console.WriteLine(fs.ReadByte());
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (stream)
+            {
+                for (int i = 0; i < stream.Length; i++)
+                {
+                    stream.ReadByte();
+                }
             }
         }
-
-        public string Name { get; set; }
-
-        public string Model { get; set; }
     }
 }

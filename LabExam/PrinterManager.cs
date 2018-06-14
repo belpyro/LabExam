@@ -5,56 +5,86 @@ using System.Windows.Forms;
 
 namespace LabExam
 {
-    public delegate void PrinterDelegate(string arg);
-
-    internal static class PrinterManager
+    public sealed class PrinterManager
     {
-        static PrinterManager()
+        private static readonly Lazy<PrinterManager> instance =
+               new Lazy<PrinterManager>(() => new PrinterManager());
+
+        private ILogger logger;
+
+        private PrinterManager()
         {
-            Printers = new List<object>();
+            Printers = new List<Printer>();
         }
 
-        public static List<object> Printers { get; set; }
+        public static PrinterManager Instance { get => instance.Value; }
 
-        public static void Add(Printer p1)
+        public List<Printer> Printers { get; private set; }
+
+        public ILogger Logger
         {
-            Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
-
-            if (!Printers.Contains(p1))
+            get
             {
-                Printers.Add(p1);
-                Console.WriteLine("Printer added");
+                if (logger == null)
+                {
+                    logger = new FileLogger("log.txt");
+                }
+
+                return logger;
+            }
+
+            set
+            {
+                logger = value ?? throw new ArgumentNullException();
             }
         }
 
-        public static void Print(EpsonPrinter p1)
+        public void Add(Printer printer)
         {
-            Log("Print started");
+            if (printer == null)
+            {
+                throw new ArgumentNullException(nameof(printer));
+            }
+
+            if (Printers.Contains(printer))
+            {
+                throw new ArgumentException("Printer is already added");
+            }
+
+            printer.StartPrint += (sender, args) => Log($"Printer {printer.Model} {printer.Name} is printing");
+            printer.EndPrint += (sender, args) => Log($"Printer {printer.Model} {printer.Name} has ended printing");
+            Printers.Add(printer);
+            Log("Printer was added");
+        }
+
+        public void Print(Printer printer)
+        {
+            if (printer == null)
+            {
+                throw new ArgumentNullException(nameof(printer));
+            }
+
+            if (!Printers.Contains(printer))
+            {
+                throw new ArgumentException("Printer can not be found");
+            }
+
             var o = new OpenFileDialog();
             o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            using (var stream = File.OpenRead(o.FileName))
+            {
+                printer.Print(stream);
+            }
         }
 
-        public static void Print(CanonPrinter p1)
+        public void Log(string message)
         {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
+            if (message == null)
+            {
+                throw new ArgumentNullException(nameof(message));
+            }
 
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
+            Logger.Log(message);
         }
-
-        public static event PrinterDelegate OnPrinted;
     }
 }
