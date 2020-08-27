@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabExam", "LabExam\LabExam.csproj", "{B1EA9492-378F-4409-9D26-A9F7FFCED7A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LabExam.UI", "LabExam.UI\LabExam.UI.csproj", "{77B25297-AA60-4264-B30C-02310BC9C7D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B1EA9492-378F-4409-9D26-A9F7FFCED7A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1EA9492-378F-4409-9D26-A9F7FFCED7A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1EA9492-378F-4409-9D26-A9F7FFCED7A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77B25297-AA60-4264-B30C-02310BC9C7D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77B25297-AA60-4264-B30C-02310BC9C7D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77B25297-AA60-4264-B30C-02310BC9C7D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77B25297-AA60-4264-B30C-02310BC9C7D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

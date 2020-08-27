@@ -1,60 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Forms;
+using LabExam.Exceptions;
+using LabExam.Logging;
 
-namespace LabExam
+namespace LabExam.Logic
 {
-    public delegate void PrinterDelegate(string arg);
-
-    internal static class PrinterManager
+    //1.logging logic was removed because it's not a responsibility of this class
+    //2.bad semantic meaning of names of variables
+    //variables was renamed
+    //3.for removing static there is a couple of reasons:
+    //1.can't use "this" when working with events
+    //2.it's not handy to work with dependencies as ILogger when deailing with static classes.
+    public sealed class PrinterManager
     {
-        static PrinterManager()
+        #region fields
+        private readonly ILogger logger;
+        private List<Printer> printers;
+        #endregion
+
+        public ReadOnlyCollection<Printer> Printers { get; private set; }
+
+        #region constructors
+        public PrinterManager(ILogger logger)
         {
-            Printers = new List<object>();
+            this.logger = logger;
+            this.printers = new List<Printer>();
+            this.Printers = new ReadOnlyCollection<Printer>(printers);
         }
+        #endregion
 
-        public static List<object> Printers { get; set; }
+        #region methods
 
-        public static void Add(Printer p1)
+        public void Add(Printer printer)
         {
-            Console.WriteLine("Enter printer name");
-            p1.Name = Console.ReadLine();
-            Console.WriteLine("Enter printer model");
-            p1.Model = Console.ReadLine();
-
-            if (!Printers.Contains(p1))
+            if (!printers.Contains(printer))
             {
-                Printers.Add(p1);
-                Console.WriteLine("Printer added");
+                printers.Add(printer);
+                printer.PrintStarted += (sender,args) => logger.Log($"Print({sender}) started");
+                printer.PrintEnded += (sender, args) => logger.Log($"Print({sender}) ended");
+            }
+            else
+            {
+                throw new PrinterAlreadyExistException("Already exist!");
             }
         }
 
-        public static void Print(EpsonPrinter p1)
+        public void Print(Printer printer, Stream printedStream)
         {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
+            if (Printers.Contains(printer))
+            {
+                printer.Print(printedStream);
+            }
+            else
+            {
+                throw new PrinterDoesntExistException($"{printer} doesnt exist");
+            }
+
         }
 
-        public static void Print(CanonPrinter p1)
-        {
-            Log("Print started");
-            var o = new OpenFileDialog();
-            o.ShowDialog();
-            var f = File.OpenRead(o.FileName);
-            p1.Print(f);
-            Log("Print finished");
-        }
-
-        public static void Log(string s)
-        {
-            File.AppendText("log.txt").Write(s);
-        }
-
-        public static event PrinterDelegate OnPrinted;
+        #endregion
     }
 }
